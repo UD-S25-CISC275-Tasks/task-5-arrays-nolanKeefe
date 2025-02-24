@@ -125,7 +125,19 @@ export function injectPositive(values: number[]): number[] {
     */
     let addneg: number[] = [];
     if (values.some((value: number): boolean => value < 0)) {
-        console.log("mewo");
+        let negloc: number = values.findIndex(
+            (value: number): boolean => value < 0,
+        );
+        addneg = values.slice(0, negloc + 1);
+        addneg.push(
+            addneg
+                .slice(0, negloc)
+                .reduce(
+                    (currentTotal: number, num: number) => currentTotal + num,
+                    0,
+                ),
+        );
+        addneg.push(...values.slice(negloc + 1));
     } else {
         //all positive
         addneg = values.map((value: number): number => value);
