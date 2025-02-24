@@ -25,7 +25,7 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    const integers = numbers.map((numeral: string): number =>
+    let integers: number[] = numbers.map((numeral: string): number =>
         isNaN(+numeral) ? 0 : +numeral,
     );
     return integers;
@@ -104,17 +104,7 @@ export function makeMath(addends: number[]): string {
     if (sum === 0) {
         return "0=0";
     }
-    let equation: string =
-        sum.toString() +
-        "=" +
-        addends[0] +
-        addends
-            .splice(1)
-            .reduce(
-                (currentString: string, num: number) =>
-                    currentString + "+" + num.toString(),
-                "",
-            );
+    let equation: string = sum.toString() + "=" + addends.join("+");
     return equation;
 }
 
@@ -128,12 +118,24 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
-    let addneg: number[] = values.map(
-        (value: number): number => (value >= 0 ? value : [value, values.reduce(
-            (currentTotal: number, num: number) =>
-                num >= 0 ? currentTotal + num : currentTotal,
-            0,
-        )].flat()
-    );
+    /*
+        okay so like i need to make a subarray up to the first negative if there is a negative
+        if there isnt a negative i need to just go through and then do the sum
+
+    */
+    let addneg: number[] = [];
+    if (values.some((value: number): boolean => value < 0)) {
+        console.log("mewo");
+    } else {
+        //all positive
+        addneg = values.map((value: number): number => value);
+        addneg.push(
+            values.reduce(
+                (currentTotal: number, num: number) => currentTotal + num,
+                0,
+            ),
+        );
+    }
+
     return addneg;
 }
